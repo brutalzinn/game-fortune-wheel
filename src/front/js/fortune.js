@@ -1,7 +1,6 @@
 const sectors = [
     // { color: '#0bf', label: 'Paladins' },
     // { color: '#fb0', label: 'Dead by The Light' },
-    { color: '#0fb', label: 'Minecraft' },
   ]
   
   const rand = (m, M) => Math.random() * (M - m) + m
@@ -53,6 +52,9 @@ const sectors = [
   
   function rotate() {
     const sector = sectors[getIndex()]
+    if(sector == undefined){
+      return
+    }
     ctx.canvas.style.transform = `rotate(${ang - PI / 2}rad)`
     spinEl.textContent = !angVel ? 'SPIN' : sector.label
     spinEl.style.background = sector.color
@@ -76,9 +78,27 @@ const sectors = [
   }
   
   function refresh(){
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     recalculate()
+    rotate() 
     sectors.forEach(drawSector)
 }
+
+function addItem(id, color, label){
+  let indexFound = sectors.findIndex(element=> element.id == id)
+  if(indexFound == -1){
+      sectors.push( { id, color, label })
+  }else{
+      sectors[indexFound].label = label
+  }
+  refresh()
+}
+
+function removeItem(id){
+  sectors.splice(id, 1)
+  refresh()
+}
+
 
   function init() {
     rotate() // Initial rotation

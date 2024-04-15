@@ -5,10 +5,11 @@ function init() {
         addRow()
     })
     refreshBtn.addEventListener('click', () => {
-       for(let i =1 ; i < gameList.rows.length; i++){
-        console.log(i)
-            addItem(i)
+       for(let i =1; i < gameList.rows.length; i++){
+            addTableItem(i)
        }
+       refresh()
+       sendData({ channel, sectors, angVel})
     })
   }
   init()

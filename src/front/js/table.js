@@ -20,6 +20,7 @@ function addRow(){
     document.getElementById(id).remove()
     removeItem(id)
     refresh()
+    sendData({channel, owner:clientId, sectors, angVel, event: events.REFRESH})
 }
 
 function addTableItem(id)
@@ -27,4 +28,6 @@ function addTableItem(id)
     var inputText = document.getElementById('game_name_'+ id);
     addItem(id, randomHexColorCode(), inputText.value)
     refresh()
+    sendData({channel, owner:clientId, sectors, angVel, event: events.REFRESH})
 }   
+

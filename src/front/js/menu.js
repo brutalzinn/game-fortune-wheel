@@ -9,7 +9,6 @@ function init() {
             addTableItem(i)
        }
        refresh()
-       sendData({ channel, sectors, angVel})
     })
   }
   init()

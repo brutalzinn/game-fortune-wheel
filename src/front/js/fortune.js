@@ -1,11 +1,9 @@
-const sectors = [
+let sectors = [
     // { color: '#0bf', label: 'Paladins' },
     // { color: '#fb0', label: 'Dead by The Light' },
   ]
   
   const rand = (m, M) => Math.random() * (M - m) + m
-  const lblWinner = document.querySelector('#lbl_winner')
-  const spinEl = document.querySelector('#spin')
   const ctx = document.querySelector('#wheel').getContext('2d')
   const friction = 0.991 // 0.995=soft, 0.99=mid, 0.98=har
   const PI = Math.PI
@@ -46,7 +44,6 @@ const sectors = [
     ctx.fillStyle = '#fff'
     ctx.font = 'bold 30px sans-serif'
     ctx.fillText(sector.label, rad - 10, 10)
-    //
     ctx.restore()
   }
   
@@ -60,7 +57,10 @@ const sectors = [
     spinEl.style.background = sector.color
     if(angVel == 0){
       lblWinner.innerHTML = "Winner: " + sector.label
+      port1.postMessage({channel, owner:clientId, sectors, angVel,label: sector.label,  event: events.END});
+      return
     }
+    port1.postMessage({channel, owner:clientId, sectors, angVel,label: sector.label,  event: events.RUNNING});
   }
   
   function frame() {
@@ -82,6 +82,7 @@ const sectors = [
     recalculate()
     rotate() 
     sectors.forEach(drawSector)
+    port1.postMessage({channel, owner:clientId, sectors, angVel, event: events.REFRESH});
 }
 
 function addItem(id, color, label){
@@ -103,8 +104,10 @@ function removeItem(id){
   function init() {
     rotate() // Initial rotation
     engine() // Start engin
+    port1.postMessage({channel, owner:clientId, sectors, angVel, event: events.CREATE});
     spinEl.addEventListener('click', () => {
       if (!angVel) angVel = rand(0.25, 0.45)
+      port1.postMessage({channel, owner:clientId, sectors, angVel, event: events.START});
     })
   }
   

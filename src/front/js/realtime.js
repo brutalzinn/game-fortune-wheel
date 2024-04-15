@@ -2,36 +2,56 @@
 
 var socket = io();
 
+
+   
 function sendData(obj){
     socket.emit(obj.channel, JSON.stringify(obj));
     console.log("trying to send " + JSON.stringify(obj) )
 }
 
-
  function init() {
-    socket.emit("channels", JSON.stringify({channel}))
-
+    lblUserType.innerHTML  = clientId
+    console.log(clientId)
+    socket.emit("channels", JSON.stringify({channel, angVel, sectors, owner: clientId}))
     socket.on(channel, function(msg){
-        console.log('server: ' + JSON.stringify(msg));
+        console.log("server recv", msg)
+        let obj = JSON.parse(msg)
+        if( obj.owner == clientId){
+            return
+        }
+        if (obj.sectors == undefined){
+            return
+        }
+        // if(obj.event == events.CREATE){
+        //     rotate() // Initial rotation
+        //     engine() // Start engin
+        //     angVel = obj.angVel
+        // }
+        if(obj.event == events.REFRESH){
+            sectors = obj.sectors
+            refresh()
+        }
+        if(obj.event == events.START){
+            angVel = obj.angVel
+        }
+        if(obj.event == events.END){
+            lblWinner.innerHTML = "Winner: " + obj.label
+            angVel = 0
+        }
+   
     });
     socket.on('disconnect', function(){
         console.log('server disconnected');
     });
+    port1.postMessage("fdsfdsfsdfsdfsdfsd")
+    port1.onmessage = onMessage
+    function onMessage(e) {
+      console.log("teste " + e)
+      }
 
-    // socket.on("channels", (channels) => {
-    //     channels.forEach((channel) => {
-    //       channel.self = channel.channelID === socket.id;
-    //     //   initReactiveProperties(channel);
-    //     });
-    //     // put the current user first, and then sort by username
-    //     this.channels = channels.sort((a, b) => {
-    //       if (a.self) return -1;
-    //       if (b.self) return 1;
-    //       if (a.username < b.username) return -1;
-    //       return a.username > b.username ? 1 : 0;
-    //     });
-    //   });
-
+    // spinEl.addEventListener('click', () => {
+    //     sendData({channel, owner:clientId, sectors, angVel, event: events.START})
+    //   })
   }
   
 init()

@@ -5,6 +5,7 @@ const express = require('express');
 const http = require('http');
 const app = express();
 const server = http.createServer(app);
+const {v4} = require("uuid")
 const { Server } = require("socket.io");
 const { channel } = require('diagnostics_channel');
 const io = new Server(server);
@@ -27,69 +28,53 @@ app.get('/', (req, res) => {
 
 const channels = []
 
+function getChannelByName(name){
+  let channel = channels.find(item => item.channel == name)
+  return channel
+}
 io.on('connection', function(socket){
 
-
      socket.on('disconnect', () => {
-        console.log('user disconnected');
-        for(let channelIdx = 0; channelIdx < channels.length; channelIdx++){
-            for(let userIdx = 0; userIdx < channels[channelIdx].users.length; userIdx++){
-                channels[channelIdx].users.splice(userIdx, 1) 
-            }
+        for(let i =0; i < channels.length; i ++){
+          if(channels[i].users == 0){
+            channels.splice(i, 1)
+            break
+          }
+          channels[i].users -= 1
         }
+        console.log(channels)
       });
 
       socket.on('channels', function(msg){
         let objChanRecv = JSON.parse(msg)
         let channelIdx = channels.findIndex(item => item.channel == objChanRecv.channel)
         if (channelIdx == -1){
-          channels.push({channel: objChanRecv.channel, users: [socket.id], owner: socket.id})
+          channels.push({channel: objChanRecv.channel,  owner: objChanRecv.owner, users: 1, event: objChanRecv.event})
         }else{
-          channels[channelIdx] = {...channels[channelIdx], users: [ ...channels[channelIdx].users, socket.id]}
+          channels[channelIdx].users += 1
         }
         socket.on(objChanRecv.channel, function(msg){
             let objRecv = JSON.parse(msg)
-            if(objRecv.owner != socket.id){
-                return
-            }   
-            let channelIdx = channels.findIndex(item => item.channel == objRecv.channel)
+            let channelIdx = channels.findIndex(item => item.channel == objRecv.channel)      
             if (channelIdx != -1){
-                channels[channelIdx].sectors = objRecv.sectors
+                if(channels[channelIdx].owner != objRecv.owner){
+                  return
+                }
+                let channelData = channels[channelIdx]
+                channels[channelIdx] = objRecv
+                channels[channelIdx].users = channelData.users
               }
-            console.log('channels received' + msg);
         });
+        console.log('channels received' + msg);
       });
 
-  
-
-    //   socket.emit("channels", channels);
-
-
-    // console.log('a user connected');
-    // socket.on('disconnect', function(){
-    //   console.log('user disconnected');
-    // });
-    // socket.us
-  
-    // socket.on('handshake', function(msg){
-    //   let obj = JSON.parse(msg)
-    //   socket.on(obj.channel, function(){
-    //     console.log('message by channel' ,obj);
-    //   });
-    //   io.emit(obj.channel, JSON.stringify(obj));
-    // });
-
-    let repeater = setInterval(() => {
-        for(let channelIdx = 0; channelIdx < channels.length; channelIdx++){
-            let obj = channels[channelIdx]
-            if(obj.users.length == 0){
-                channels.splice(channelIdx, 1)
-                break
-            }
-            socket.emit(obj.channel, JSON.stringify(obj))
+      setInterval(() => {
+        for(let i =0; i < channels.length; i ++){
+          let channel = channels[i]
+          console.log(channel)
+          socket.emit(channel.channel, JSON.stringify(channel))
         }
-             console.log(channels)
-        }, 5000);
+      }, 1500);
   });
 
 server.listen(port,() => {

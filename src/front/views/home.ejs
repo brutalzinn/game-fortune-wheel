@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Fortuna <%= channel %></title>
-    <meta charset="UTF-8" />
-    <script defer src="js/definitions.js"></script>
-    <script defer src="js/util.js"></script>
-    <script defer src="/socket.io/socket.io.js"></script>
-    <script defer src="js/fortune.js"></script>
-    <script defer src="js/realtime.js"></script>
-    <script defer src="js/table.js"></script>
-    <script defer src="js/menu.js"></script>
+
+<head>
+  <title>Fortuna <%= channel %>
+  </title>
+  <meta charset="UTF-8" />
+  <script defer src="js/definitions.js"></script>
+  <script defer src="js/util.js"></script>
+  <script defer src="/socket.io/socket.io.js"></script>
+  <script defer src="js/fortune.js"></script>
+  <script defer src="js/table.js"></script>
+  <script defer src="js/menu.js"></script>
 
 
-    <% if(channel) {%>
-      <script>
-         var channel = "<%- channel  %>";
-      </script>
+  <% if(channel) {%>
+    <script>
+      var channel = "<%- channel  %>";
+    </script>
     <% } %>
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  </head>
+      <link rel="stylesheet" href="styles/styles.css" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
 
-  <body>
-    <div id="wheelOfFortune">
-      <canvas id="wheel" width="300" height="300"></canvas>
-      <div id="spin">SPIN</div>
-    </div>
+<body>
+  <div id="wheelOfFortune">
+    <canvas id="wheel" width="300" height="300"></canvas>
+    <div id="spin">SPIN</div>
+  </div>
 
-    <div id="lbl_winner">Winner:</div>
-    <div id="lbl_user_type">{USER_ID}</div>
-    <div>
-        <table id="game_list" class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Game</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-          <button id="btn_add" type="button" class="btn btn-primary">Add</button>
-          <button id="btn_refresh" type="button" class="btn btn-primary">Refresh</button>
-    </div>
+  <div id="lbl_winner">Winner:</div>
+  <div id="lbl_user_type">{USER_ID}</div>
+  <div>
+    <table id="game_list" class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Game</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <button id="btn_add" type="button" class="btn btn-primary">Add</button>
+    <button id="btn_refresh" type="button" class="btn btn-primary">Refresh</button>
+  </div>
+  <button id="btn_share" type="button" class="btn btn-primary">Share</button>
+</body>
 
-
-
-    <button id="btn_share" type="button" class="btn btn-primary">Share</button>
-  </body>
 </html>

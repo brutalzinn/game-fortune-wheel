@@ -6,10 +6,6 @@ const gameList = document.getElementById('game_list');
 const lblWinner = document.querySelector('#lbl_winner')
 const spinEl = document.querySelector('#spin')
 const clientId = crypto.randomUUID()
-const messageChannel = new MessageChannel();
-const port1 = messageChannel.port1;
-
-//new CustomEvent("fortune", {});
 const events = {
     START: "START",
     CREATE: "CREATE",

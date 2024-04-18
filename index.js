@@ -9,7 +9,7 @@ const { v4 } = require("uuid")
 const { Server } = require("socket.io");
 const { channel } = require('diagnostics_channel');
 const io = new Server(server);
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', './src/front/views');

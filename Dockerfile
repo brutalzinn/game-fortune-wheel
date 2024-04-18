@@ -7,4 +7,5 @@ COPY package.json .
 RUN npm install
 # Bundle app source
 COPY index.js ./
+
 CMD [ "npm", "run", "dev" ]

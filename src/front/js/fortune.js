@@ -1,13 +1,8 @@
-let sectors = [
-  // { id: 1, color: '#0bf', label: 'Paladins' },
-  // { id: 2, color: '#fb0', label: 'Dead by The Light' },
-]
-
+let sectors = []
 const rand = (m, M) => Math.random() * (M - m) + m
 const ctx = document.querySelector('#wheel').getContext('2d')
 const friction = 0.991 // 0.995=soft, 0.99=mid, 0.98=har
 const PI = Math.PI
-const socket = io();
 
 let tot = sectors.length
 let dia = ctx.canvas.width
@@ -16,7 +11,6 @@ let TAU = 2 * PI
 let arc = TAU / sectors.length
 let angVel = 0 // Angular velocity
 let ang = 0 // Angle in radians
-
 const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot
 
 function recalculate() {
@@ -102,54 +96,19 @@ function removeItem(id) {
   refresh()
 }
 
-function sendData(obj) {
-  socket.emit(obj.channel, JSON.stringify(obj));
-  console.log("trying to send " + JSON.stringify(obj))
+
+
+function applyOwnerVisualEffects(){
+  if(isOwner){
+    lblUserType.innerHTML = `${clientId} - MASTER`
+    menu.style.visibility="block"
+    return
+  }
+  lblUserType.innerHTML = `${clientId} - SLAVE`
+  menu.style.visibility="hidden"
 }
 
-function sync() {
-  lblUserType.innerHTML = clientId
-  socket.emit("channels", JSON.stringify({ channel, angVel, sectors, label: "", owner: clientId }))
-  socket.on(channel, function (msg) {
-    let obj = JSON.parse(msg)
-    console.log("server recv", JSON.stringify(obj))
-    let isOwner = obj.owner == clientId
-    if (isOwner) {
-      console.log("owner dont need be here")
-      return
-    }
-    console.log("start env", obj.event)
-    switch (obj.event) {
-      case events.CREATE: {
-        sectors = obj.sectors
-        // angVel = obj.angVel
-      }
-      case events.RUNNING: {
-        // sectors = obj.sectors
-        // ang = obj.ang
-        // angVel = obj.angVel
-      }
-      case events.REFRESH: {
-        sectors = obj.sectors
-        refresh()
-      }
-      case events.START: {
-        angVel = obj.angVel
-        ang = obj.ang
-      }
-      case events.END: {
-        // lblWinner.innerHTML = "Winner: " + obj.label
-        // angVel = 0
-        // sendData({ channel, owner: clientId, sectors, label: "", angVel, event: events.CREATE });
-        // refresh()
-      }
-    }
-  });
 
-  socket.on('disconnect', function () {
-    console.log('server disconnected');
-  });
-}
 function init() {
   refresh()
   sync()

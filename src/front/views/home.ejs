@@ -5,9 +5,10 @@
   <title>Fortuna <%= channel %>
   </title>
   <meta charset="UTF-8" />
-  <script defer src="js/definitions.js"></script>
-  <script defer src="js/util.js"></script>
   <script defer src="/socket.io/socket.io.js"></script>
+  <script defer src="js/definitions.js"></script>
+  <script defer src="js/realtime.js"></script>
+  <script defer src="js/util.js"></script>
   <script defer src="js/fortune.js"></script>
   <script defer src="js/table.js"></script>
   <script defer src="js/menu.js"></script>
@@ -32,6 +33,7 @@
   <div id="lbl_winner">Winner:</div>
   <div id="lbl_user_type">{USER_ID}</div>
   <div>
+    <div id="menu">
     <table id="game_list" class="table">
       <thead>
         <tr>
@@ -44,6 +46,7 @@
     </table>
     <button id="btn_add" type="button" class="btn btn-primary">Add</button>
     <button id="btn_refresh" type="button" class="btn btn-primary">Refresh</button>
+  </div>
   </div>
   <button id="btn_share" type="button" class="btn btn-primary">Share</button>
 </body>

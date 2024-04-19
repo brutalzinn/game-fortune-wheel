@@ -98,15 +98,7 @@ function removeItem(id) {
 
 
 
-function applyOwnerVisualEffects(){
-  if(isOwner){
-    lblUserType.innerHTML = `${clientId} - MASTER`
-    menu.style.visibility="block"
-    return
-  }
-  lblUserType.innerHTML = `${clientId} - SLAVE`
-  menu.style.visibility="hidden"
-}
+
 
 
 function init() {

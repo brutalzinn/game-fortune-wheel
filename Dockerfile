@@ -4,8 +4,6 @@ FROM node:18
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-COPY tsconfig.* ./
-
 COPY package.json package.json
 
 RUN npm install

@@ -9,8 +9,8 @@ function sync() {
     let obj = JSON.parse(msg)
     isOwner = obj.owner == clientId
     console.log("server recv", JSON.stringify(obj))
+    applyOwnerVisualEffects()
     if (isOwner) {
-      applyOwnerVisualEffects()
       return
     }
     console.log("start env", obj.event)

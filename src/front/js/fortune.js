@@ -96,11 +96,6 @@ function removeItem(id) {
   refresh()
 }
 
-
-
-
-
-
 function init() {
   refresh()
   sync()
@@ -109,7 +104,7 @@ function init() {
   spinEl.addEventListener('click', () => {
     if (!angVel) {
       angVel = rand(0.25, 0.45)
-      sendData({ channel, owner: clientId, sectors, label: "", angVel, ang, event: events.START });
+      sendData({ channel, owner: clientId, sectors, label: "Starting...", angVel, ang, event: events.START });
     }
 
   })

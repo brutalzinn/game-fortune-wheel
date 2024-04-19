@@ -35,14 +35,14 @@ function getChannelByName(name) {
 io.on('connection', function (socket) {
 
   socket.on('disconnect', () => {
-    for (let i = 0; i < channels.length; i++) {
-      if (channels[i].users == 0) {
-        channels.splice(i, 1)
-        break
-      }
-      channels[i].users -= 1
-    }
-    console.log(channels)
+    // for (let i = 0; i < channels.length; i++) {
+    //   if (channels[i].users == 0) {
+    //     channels.splice(i, 1)
+    //     break
+    //   }
+    //   channels[i].users -= 1
+    // }
+    // console.log(channels)
   });
 
   socket.on('channels', function (msg) {
